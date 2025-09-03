@@ -1,0 +1,4 @@
+[submodule "kubekey"]
+	path = kubekey
+	url = https://github.com/lwj-st/kubekey.git
+	branch = v3.0.7_private
