@@ -1,25 +1,22 @@
-### kubernetes 安装
+# 快速使用
+
+## 装依赖
 
 ```bash
-# 装docker
-curl -fsSL https://test.docker.com -o test-docker.sh
-sh test-docker.sh
-# 装依赖
 apt-get install socat conntrack -y
+```
 
-# 编译kk
-cd kubekey
-wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go         # 如果之前安装过旧版本先删除
-sudo tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
 
-# 部署
+## 部署
+
+```bash
 export KKZONE=cn  
-cd bin
 echo yes|./kk create cluster --with-kubernetes v1.21.5  --with-kubesphere v3.3.2
+```
 
+## 污点处理
 
+```bash
 # 查看污点
 kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints 
 # 去污点
@@ -28,14 +25,30 @@ kubectl get node
 kubectl taint nodes ${node_name} node-role.kubernetes.io/master:NoSchedule-
 ```
 
-### ks-installer 镜像构建
+
+# 工具准备
+
+## 编译kk
+
+```bash
+cd kubekey
+wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go         # 如果之前安装过旧版本先删除
+sudo tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+make kk
+```
+
+## ks-installer 镜像构建
 
 ```bash
 cd ks-installer
 docker build -t registry.cn-hangzhou.aliyuncs.com/kubesphere-tmp/ks-installer:v3.3.2 .
 ```
 
-### kubernetes需要的镜像
+# 镜像信息
+
+## kubernetes需要的镜像
 
 ```bash
 registry.cn-beijing.aliyuncs.com/kubesphereio/pause:3.4.1
@@ -52,7 +65,7 @@ registry.cn-beijing.aliyuncs.com/kubesphereio/pod2daemon-flexvol:v3.23.2
 
 ```
 
-### KubeSphere 需要镜像
+## KubeSphere 需要镜像
 
 ```bash
 kubesphereio/ks-installer:v3.3.2
